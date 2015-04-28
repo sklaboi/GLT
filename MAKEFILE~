@@ -1,0 +1,10 @@
+CFLAGS = -Wall -ansi -ggdb
+
+program: main.o flagi.o generator.o stats.o tworz.o
+	$(CC) $(CFLAGS) main.o flagi.o generator.o stats.o tworz.o
+
+main.o: main.c flagi.h
+# flagi.o: flagi.c flagi.h
+generator.o: generator.c generator.h stats.h
+stats.o: stats.c stats.h
+tworz.o: tworz.c tworz.h

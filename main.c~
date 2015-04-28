@@ -13,7 +13,7 @@ int main(int argc, char * argv[]) {
 	int n = -2; /* rzad n-gramu */
 	FILE *in[100]; /* pliki wejsciowe */
 	FILE *out; /* plik wyjsciowy */
-	FILE *open; /* wczytywanie ustawien */
+	FILE *odtworz; /* wczytywanie ustawien */
 
 	char sciezka[100]; /* dodawanie sciezki (folderu) i rozszerzenia do nazyw pliku */
 	char nazwa_wyj[100];
@@ -26,7 +26,7 @@ int main(int argc, char * argv[]) {
 	int ln = 0;
 	int lin = 0; /* lin == -1 -> blad we wczytywaniu plikow, bedzie przechowywac liczbe plikow wejsciowych */
 	int lout = -4; /* lout == -1 -> blad, lout == -4 -> dopisz stdout */
-	int lopen = 0; /* blad */
+	int lodtworz = 0; /* blad */
 	int index = 0; /* numer argumentu, od ktorego zaczynaja sie nazwy plikow wejsciowych */
 	int status_in = 0; /* kontrola statusu wczytywania plikow wejsciowych */
 
@@ -41,13 +41,13 @@ int main(int argc, char * argv[]) {
 	for(i = 1; i < argc; i++) {
 		if(strcmp(argv[i], "-s") == 0 && ls != 1) {
 			ls = 1;
-			s = flag_s(argv[i+1]);
+			s = flaga_s(argv[i+1]);
 		} else if(strcmp(argv[i], "-a") == 0 && la != 1) {
 			la = 1;
-			a = flag_a(argv[i+1]);
-		} else if(strcmp(argv[i], "-n") == 0 && ln != 1 && lopen == 0) {
+			a = flaga_a(argv[i+1]);
+		} else if(strcmp(argv[i], "-n") == 0 && ln != 1 && lodtworz == 0) {
 			ln = 1;
-			n = flag_n(argv[i+1]);
+			n = flaga_n(argv[i+1]);
 		} else if(strcmp(argv[i], "-out") == 0 && lout != 1) {
 			lout = spr_out(argv[i+1]);
 			if (lout == -3)
@@ -57,15 +57,15 @@ int main(int argc, char * argv[]) {
 				strcat(sciezka, argv[i+1]);
 				out = fopen(sciezka, "w");
 				strcat(nazwa_wyj, argv[i+1]);
-		} else if(strcmp(argv[i], "-open") == 0 && lopen != 1 && ln == 0 && lin == 0) {
-			lopen = spr_open(argv[i+1]);
-			if (lopen == -3)
-				lopen = i+1;
+		} else if(strcmp(argv[i], "-odtworz") == 0 && lodtworz != 1 && ln == 0 && lin == 0) {
+			lodtworz = spr_odtworz(argv[i+1]);
+			if (lodtworz == -3)
+				lodtworz = i+1;
 				sciezka[0] = 0;
 				strcat(sciezka, "LOGS/");
 				strcat(sciezka, argv[i+1]);
 				strcat(sciezka, ".log");
-				open = fopen(sciezka, "r");
+				odtworz = fopen(sciezka, "r");
 				strcat(nazwa_wej, argv[i+1]);
 				nazwa_wej[0] = 0;
 				strcat(nazwa_wej, argv[i+1]);
@@ -88,9 +88,9 @@ int main(int argc, char * argv[]) {
 
 	/* !!! INFORMACJA O ROZPOCZECIU PRACY !!! */
 
-	if (lopen > 0) {
+	if (lodtworz > 0) {
 		if (s == -2 && a == -2) {
-			printf("\nINFORMACJA: Nie podano liczby generowanych slow ani akapitow. Teraz Program pobierze ostatnio uzywane ustawienia wejsciowe z pliku: %s\n", argv[lopen]);
+			printf("\nINFORMACJA: Nie podano liczby generowanych slow ani akapitow. Teraz Program pobierze ostatnio uzywane ustawienia wejsciowe z pliku: %s\n", argv[lodtworz]);
 			sciezka[0] = 0;
 			if (lout != -4) {
 				if ((lout = spr_out(nazwa_wyj)) == -3) {
@@ -100,22 +100,22 @@ int main(int argc, char * argv[]) {
 					out = fopen(sciezka, "w");
 				}
 			}
-			if (fscanf(open, "%s", sbufor) && strcmp(sbufor, "-n") == 0) {
-				if (fscanf(open, "%s", sbufor)) {
-					n = flag_n(sbufor);
+			if (fscanf(odtworz, "%s", sbufor) && strcmp(sbufor, "-n") == 0) {
+				if (fscanf(odtworz, "%s", sbufor)) {
+					n = flaga_n(sbufor);
 					sbufor[0] = 0;
-					if (fscanf(open, "%s", sbufor) && strcmp(sbufor, "-s") == 0) {
+					if (fscanf(odtworz, "%s", sbufor) && strcmp(sbufor, "-s") == 0) {
 						sbufor[0] = 0;
-						if (fscanf(open, "%s", sbufor)) {
-							s = flag_s(sbufor);
+						if (fscanf(odtworz, "%s", sbufor)) {
+							s = flaga_s(sbufor);
 							a = -2;
 						} else {
 							printf("BLAD: Nieprawidlowy format pliku z ustawieniami wejsciowymi.\n");
 						}
 					} else if (strcmp(sbufor, "-a") == 0) {
 						sbufor[0] = 0;
-						if (fscanf(open, "%s", sbufor)) {
-							a = flag_a(sbufor);
+						if (fscanf(odtworz, "%s", sbufor)) {
+							a = flaga_a(sbufor);
 							s = -2;
 						} else {
 							printf("BLAD: Nieprawidlowy format pliku z ustawieniami wejsciowymi.\n");
@@ -128,10 +128,10 @@ int main(int argc, char * argv[]) {
 				printf("BLAD: Nieprawidlowy format pliku z ustawieniami wejsciowymi.\n");
 			}
 		} else {
-			rewind(open);
-			if (fscanf(open, "%s", sbufor) && strcmp(sbufor, "-n") == 0) {
-				fscanf(open, "%s", sbufor);
-				n = flag_n(sbufor);
+			rewind(odtworz);
+			if (fscanf(odtworz, "%s", sbufor) && strcmp(sbufor, "-n") == 0) {
+				fscanf(odtworz, "%s", sbufor);
+				n = flaga_n(sbufor);
 				printf("INFORMACJA: Wczytany rzad n-gramu: %d.\n", n);
 			}
 		}
@@ -157,9 +157,9 @@ int main(int argc, char * argv[]) {
 		
 	}
 
-/*	printf("kontrola bledow: s = %d, a = %d, n = %d, lin = %d, lout = %d, lopen = %d\n",s,a,n,lin,lout,lopen);*/
-	if (kontrola_bledow( s, a, n, lin, lout, lopen) == -1) { /* -1 jezeli jest blad - zakoncz program */
-		if (lopen == 0) {
+/*	printf("kontrola bledow: s = %d, a = %d, n = %d, lin = %d, lout = %d, lodtworz = %d\n",s,a,n,lin,lout,lodtworz);*/
+	if (kontrola_bledow( s, a, n, lin, lout, lodtworz) == -1) { /* -1 jezeli jest blad - zakoncz program */
+		if (lodtworz == 0) {
 			printf("\nINFORMACJA: Program zakonczyl dzialanie w fazie wczytywania flag z powodu napotkanych bledow.\n\n");
 		} else {
 			printf("\nINFORMACJA: Program zakonczyl dzialanie w fazie wczytywania ustawien wejsciowych z pliku z powodu napotkanych bledow.\n\n");
@@ -167,19 +167,19 @@ int main(int argc, char * argv[]) {
 		return -1;
 	}
 
-/*	if (a == -2 && lopen == 0) {
+/*	if (a == -2 && lodtworz == 0) {
 		printf("\nINFORMACJA: Generator rozpoczyna prace z nastepujacymi parametrami:\n  rzad n-gramu = %d\n  maksymalna liczba slow do wygenerowania = %d\n  plik wyjsciowy: %s\n  pliki wejsciowe:", n, s, lout == -4 ? "wyjscie standardowe" : argv[lout]);
 		for(j = 0; j < lin; j++)
 			printf(" %s", argv[j+index]);
 		printf("\n\n");
-	} else if (s == -2 && lopen == 0) {
+	} else if (s == -2 && lodtworz == 0) {
 		printf("\nINFORMACJA: Generator rozpoczyna prace z nastepujacymi parametrami:\n  rzad n-gramu = %d\n  maksymalna liczba akapitow do wygenerowania = %d\n  plik wyjsciowy: %s\n  pliki wejsciowe:", n, a, lout == -4 ? "wyjscie standardowe" : argv[lout]);
 		for(j = 0; j < lin; j++)
 			printf(" %s", argv[j+index]);
 		printf("\n\n");
 	} */
 
-	if (generator( n, s, a, in, out, open, lin, lopen, nazwa_wyj, nazwa_wej) != 0) {
+	if (generator( n, s, a, in, out, odtworz, lin, lodtworz, nazwa_wyj, nazwa_wej) != 0) {
 		printf("\nINFORMACJA: Program zakonczyl dzialanie z powodu napotkanych bledow.\n\n");
 		return -1;
 	} else {
