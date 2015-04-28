@@ -4,10 +4,10 @@
 #include <string.h>
 
 #include "generator.h"
-#include "stats.h"
-#include "tworz.h"
+#include "stat.h"
+#include "make.h"
 
-int generator ( int n, int s, int a, FILE *in[], FILE *out, FILE *odtworz, int lin, int lodtworz, char * nazwa_wyj, char * nazwa_wej) {
+int generator ( int n, int s, int a, FILE *in[], FILE *out, FILE *open, int lin, int lopen, char * nazwa_wyj, char * nazwa_wej) {
 	
 	char sciezka[100];
 	char bufor[100];
@@ -18,11 +18,11 @@ int generator ( int n, int s, int a, FILE *in[], FILE *out, FILE *odtworz, int l
 
 	for (i = 0; i < lin; i++) {
 		rewind(in[i]);
-		wszystkichngramow += licz_slowa(in[i]) - n + 1;
+		wszystkichngramow += count_words(in[i]) - n + 1;
 		rewind(in[i]);
 	}
 
-	if (lodtworz > 0) {
+	if (lopen > 0) {
 		sciezka[0] = 0;
 		strcat(sciezka, "DATA/");
 		strcat(sciezka, nazwa_wej);
@@ -33,17 +33,17 @@ int generator ( int n, int s, int a, FILE *in[], FILE *out, FILE *odtworz, int l
 			return 1;
 		}
 
-		rewind(odtworz);
-		wszystkichngramow += licz_slowa(data) - n + 1;
-		rewind(odtworz);
+		rewind(open);
+		wszystkichngramow += count_words(data) - n + 1;
+		rewind(open);
 	}
 
-	printf("\nMODUL GENERATOR:  n = %d, s = %d, a = %d, lin = %d, lodtworz = %d, nazwa_wyj = %s\n\n", n, s, a, lin, lodtworz, nazwa_wyj);
+	printf("\nMODUL GENERATOR:  n = %d, s = %d, a = %d, lin = %d, lopen = %d, nazwa_wyj = %s\n\n", n, s, a, lin, lopen, nazwa_wyj);
 
-	if (lodtworz == 0) { /* jesli nie podano pliku do odtworzenia */
-		if (tworz_log(n, s, a, nazwa_wyj) == 1) /* stworz log */
+	if (lopen == 0) { /* jesli nie podano pliku do openenia */
+		if (make_log(n, s, a, nazwa_wyj) == 1) /* smake log */
 			return 1;
-		if (tworz_data( n, lin, in, nazwa_wyj) == 1)
+		if (make_data( n, lin, in, nazwa_wyj) == 1)
 			return 1;
 	}
 
@@ -53,12 +53,12 @@ int generator ( int n, int s, int a, FILE *in[], FILE *out, FILE *odtworz, int l
 	strcat(sciezka, nazwa_wyj);
 	strcat(sciezka, ".data");
 
-	if (lodtworz > 0) {
+	if (lopen > 0) {
 		sciezka[0] = 0;
 		strcat(sciezka, "DATA/");
 		strcat(sciezka, nazwa_wej);
 		strcat(sciezka, ".data");
-		if (tworz_log(n, s, a, nazwa_wyj) == 1) /* stworz log */
+		if (make_log(n, s, a, nazwa_wyj) == 1) /* smake log */
 			return 1;
 		fclose(data);
 		if ((data = fopen(sciezka, "r")) == NULL) {
@@ -66,7 +66,7 @@ int generator ( int n, int s, int a, FILE *in[], FILE *out, FILE *odtworz, int l
 			return 1;
 		}
 		wszystkichngramow = 0;
-		wszystkichngramow += (licz_slowa(data)/(n+1));
+		wszystkichngramow += (count_words(data)/(n+1));
 		printf("wszystkich ngramow z wczytywanego pliku: %d\n", wszystkichngramow);
 		fclose(data);
 	}
@@ -95,7 +95,7 @@ int generator ( int n, int s, int a, FILE *in[], FILE *out, FILE *odtworz, int l
 		}
 	}
 
-	if (lodtworz == 0) {
+	if (lopen == 0) {
 		if (stat_wej(n, lin, in, nazwa_wyj, lista, wszystkichngramow) == 1)
 			return 1;
 	}
@@ -104,16 +104,16 @@ int generator ( int n, int s, int a, FILE *in[], FILE *out, FILE *odtworz, int l
 
 	/* GENEROWANIE TEKSTU!!! */
 
-	if (tworz_akapity(n, s, a, liczba_ngramow, lista, nazwa_wyj, out) == 1)
+	if (make_paragraph(n, s, a, liczba_ngramow, lista, nazwa_wyj, out) == 1)
 		return 1;
 	
-	/* tworzenie statystyk wyrzucic do funkcji generujacej tekst */
+	/* makeenie statystyk wyrzucic do funkcji generujacej tekst */
 	fclose(out);
 	sciezka[0] = 0;
 	strcat(sciezka, "OUT/");
 	strcat(sciezka, nazwa_wyj);
 	if ((out = fopen(sciezka, "r")) == NULL) {
-		printf("BLAD: Nie mozna bylo otworzyc wygenerowanego pliku z tekstem w celu utworzenia statystyk.\n");
+		printf("BLAD: Nie mozna bylo omakeyc wygenerowanego pliku z tekstem w celu umakeenia statystyk.\n");
 		return 1;
 	}
 	if (stat_wyj(out, nazwa_wyj) == 1)

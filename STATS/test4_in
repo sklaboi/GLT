@@ -1,0 +1,29 @@
+	STATYSTYKI DLA PLIKÓW WEJŚCIOWYCH:
+
+Liczba plików źródłowych: 1.
+Liczba wszystkich słów: 29.
+Liczba wygenerowanych n-gramów: 28.
+
+Najczęściej powtarzające się ngramy (liczba powtórzeń x n-gram (prawdopodobieństwo wystąpienia, wartość wskaźnika PMI):
+	1x Ala ma (0.0357, PMI: 15.02)
+	1x ma kota (0.0357, PMI: 7.51)
+	1x kota oraz (0.0357, PMI: 7.51)
+	1x oraz papuge. (0.0357, PMI: 15.02)
+	1x papuge. Ela (0.0357, PMI: 15.02)
+	1x Ela ma (0.0357, PMI: 7.51)
+	1x ma psa (0.0357, PMI: 15.02)
+	1x psa oraz (0.0357, PMI: 15.02)
+	1x oraz kita. (0.0357, PMI: 15.02)
+	1x kita. Ja (0.0357, PMI: 30.04)
+
+Najczęściej powtarzające się słowa (liczba powtórzeń x słowo (prawdopodobieństwo wystąpienia)):
+	2x ma (0.0690)
+	2x kota (0.0690)
+	2x oraz (0.0690)
+	2x Ela (0.0690)
+	2x psa, (0.0690)
+	1x Ala (0.0345)
+	1x papuge. (0.0345)
+	1x psa (0.0345)
+	1x kita. (0.0345)
+	1x Ja (0.0345)

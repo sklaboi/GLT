@@ -100,7 +100,7 @@ int generator ( int n, int s, int a, FILE *in[], FILE *out, FILE *open, int lin,
 			return 1;
 	}
 
-/*	drukuj_strukt(n, liczba_ngramow, lista);*/
+/*	druk_strukt(n, liczba_ngramow, lista);*/
 
 	/* GENEROWANIE TEKSTU!!! */
 

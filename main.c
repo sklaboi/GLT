@@ -138,9 +138,9 @@ int main(int argc, char * argv[]) {
 	}
 
 	/* ustawianie wartosci domyslnych, kontrola bledow */
-	n = dopisanie_n( n );
-	s = dopisanie_s( s, a );
-	a = dopisanie_a( a );
+	n = added_n( n );
+	s = added_s( s, a );
+	a = added_a( a );
 	if ( lout == -4 ) {
 		printf("INFORMACJA: Nie podano flagi -out, program bedzie generowac tekst na wyjscie standardowe.\n");
 	/*	out = stdout;*/
@@ -158,7 +158,7 @@ int main(int argc, char * argv[]) {
 	}
 
 /*	printf("kontrola bledow: s = %d, a = %d, n = %d, lin = %d, lout = %d, lopen = %d\n",s,a,n,lin,lout,lopen);*/
-	if (kontrola_bledow( s, a, n, lin, lout, lopen) == -1) { /* -1 jezeli jest blad - zakoncz program */
+	if (error_control( s, a, n, lin, lout, lopen) == -1) { /* -1 jezeli jest blad - zakoncz program */
 		if (lopen == 0) {
 			printf("\nINFORMACJA: Program zakonczyl dzialanie w fazie wczytywania flag z powodu napotkanych bledow.\n\n");
 		} else {

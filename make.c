@@ -1,11 +1,11 @@
-#include "tworz.h"
+#include "make.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
-/*#include "struktura.h"*/
+//#include "struct.h"
 
 int make_words( int n, int s, int wszystkich_ngramow, struktura_t lista[], char * nazwa_wyj, FILE * out) {
 

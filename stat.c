@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "tworz.h"
-/*#include "struktura.h"*/
+#include "make.h"
+#include "struct.h"
 int make_log ( int n, int s, int a, char * nazwa_wyj) {
 
 	FILE * log;

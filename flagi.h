@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 int flag_s( char * );
-int flag_a( char * ):
+int flag_a( char * );
 int flag_n( char * );
 int error_control( int, int, int, int, int, int );
 int added_n ( int );
